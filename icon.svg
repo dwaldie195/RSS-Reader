@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="m3-earth-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5B6400" />
+      <stop offset="100%" stop-color="#444B00" />
+    </linearGradient>
+  </defs>
+  <!-- Material 3 Rounded Container -->
+  <rect width="512" height="512" rx="112" fill="url(#m3-earth-grad)" />
+  <!-- RSS Waves & Dot in on-primary (#FFFFFF) -->
+  <circle cx="148" cy="364" r="36" fill="#FFFFFF" />
+  <path d="M124 236 A 148 148 0 0 1 272 384" fill="none" stroke="#FFFFFF" stroke-width="40" stroke-linecap="round" />
+  <path d="M124 136 A 248 248 0 0 1 372 384" fill="none" stroke="#FFFFFF" stroke-width="40" stroke-linecap="round" />
+</svg>

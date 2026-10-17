@@ -1,0 +1,3056 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#5B6400" id="meta-theme-color" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Rustic Reader" />
+  <meta name="description" content="Rustic Reader — Material You (M3) Minimalist RSS & Atom PWA inspired by Google Reader" />
+  <title>Rustic Reader — Material You RSS PWA</title>
+  
+  <!-- PWA Manifest & App Icons -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
+  <!-- Typography: Roboto / Google Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       MATERIAL 3 (MATERIAL YOU) DESIGN SYSTEM TOKENS
+       Cohesive earthy palette: Olive Green / Warm Sand / Clay
+       ========================================================================== */
+    :root,
+    [data-theme="light"] {
+      /* M3 Core Palette */
+      --md-sys-color-primary: #5B6400;
+      --md-sys-color-on-primary: #FFFFFF;
+      --md-sys-color-primary-container: #DEEB78;
+      --md-sys-color-on-primary-container: #1A1E00;
+
+      --md-sys-color-secondary: #5D6048;
+      --md-sys-color-on-secondary: #FFFFFF;
+      --md-sys-color-secondary-container: #E2E4C6;
+      --md-sys-color-on-secondary-container: #1A1D0A;
+
+      --md-sys-color-tertiary: #3A665A;
+      --md-sys-color-on-tertiary: #FFFFFF;
+      --md-sys-color-tertiary-container: #BCECE0;
+      --md-sys-color-on-tertiary-container: #00201A;
+
+      --md-sys-color-background: #FDFCF7;
+      --md-sys-color-on-background: #1B1C18;
+
+      --md-sys-color-surface: #FDFCF7;
+      --md-sys-color-on-surface: #1B1C18;
+      --md-sys-color-surface-dim: #DEDAD3;
+      --md-sys-color-surface-bright: #FDFCF7;
+      --md-sys-color-surface-container-lowest: #FFFFFF;
+      --md-sys-color-surface-container-low: #F7F3EC;
+      --md-sys-color-surface-container: #F1EDE6;
+      --md-sys-color-surface-container-high: #EBE7E0;
+      --md-sys-color-surface-container-highest: #E5E2DB;
+
+      --md-sys-color-outline: #77786B;
+      --md-sys-color-outline-variant: #C7C8B8;
+      --md-sys-color-scrim: #000000;
+
+      /* M3 Elevation Shadows */
+      --md-sys-elevation-1: 0 1px 3px 1px rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.12);
+      --md-sys-elevation-2: 0 2px 6px 2px rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.12);
+      --md-sys-elevation-3: 0 4px 8px 3px rgba(0, 0, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+      --md-sys-elevation-4: 0 6px 10px 4px rgba(0, 0, 0, 0.08), 0 2px 3px 0 rgba(0, 0, 0, 0.12);
+
+      /* Typography & Corner Radii */
+      --font-sans: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: 'Newsreader', Georgia, serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --reader-font-family: var(--font-serif);
+      --reader-font-size: 1.125rem;
+      --reader-line-height: 1.78;
+
+      --radius-xs: 8px;
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-pill: 9999px;
+
+      --transition-fast: 150ms cubic-bezier(0.2, 0, 0, 1);
+      --transition-standard: 250ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    [data-theme="dark"] {
+      --md-sys-color-primary: #C2CF5E;
+      --md-sys-color-on-primary: #2E3300;
+      --md-sys-color-primary-container: #444B00;
+      --md-sys-color-on-primary-container: #DEEB78;
+
+      --md-sys-color-secondary: #C6C8AB;
+      --md-sys-color-on-secondary: #2F321D;
+      --md-sys-color-secondary-container: #454832;
+      --md-sys-color-on-secondary-container: #E2E4C6;
+
+      --md-sys-color-tertiary: #A1D0C4;
+      --md-sys-color-on-tertiary: #04372D;
+      --md-sys-color-tertiary-container: #214E43;
+      --md-sys-color-on-tertiary-container: #BCECE0;
+
+      --md-sys-color-background: #131411;
+      --md-sys-color-on-background: #E5E2DB;
+
+      --md-sys-color-surface: #131411;
+      --md-sys-color-on-surface: #E5E2DB;
+      --md-sys-color-surface-dim: #131411;
+      --md-sys-color-surface-bright: #393A35;
+      --md-sys-color-surface-container-lowest: #0E0F0C;
+      --md-sys-color-surface-container-low: #1B1C18;
+      --md-sys-color-surface-container: #1F201C;
+      --md-sys-color-surface-container-high: #2A2B26;
+      --md-sys-color-surface-container-highest: #343530;
+
+      --md-sys-color-outline: #919284;
+      --md-sys-color-outline-variant: #46483C;
+      --md-sys-color-scrim: #000000;
+
+      --md-sys-elevation-1: 0 1px 3px 1px rgba(0, 0, 0, 0.35);
+      --md-sys-elevation-2: 0 2px 6px 2px rgba(0, 0, 0, 0.45);
+      --md-sys-elevation-3: 0 4px 8px 3px rgba(0, 0, 0, 0.55);
+      --md-sys-elevation-4: 0 6px 10px 4px rgba(0, 0, 0, 0.65);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background-color: var(--md-sys-color-background);
+      color: var(--md-sys-color-on-background);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color var(--transition-standard), color var(--transition-standard);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--md-sys-color-outline-variant);
+      border-radius: var(--radius-pill);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--md-sys-color-outline);
+    }
+
+    /* M3 App Shell & Adaptive Layouts */
+    .app-shell {
+      display: grid;
+      width: 100vw;
+      height: 100dvh;
+      overflow: hidden;
+      position: relative;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto;
+    }
+
+    /* Tablet Navigation Rail (600px - 1024px) */
+    .nav-rail {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 8px;
+      background-color: var(--md-sys-color-surface-container-low);
+      border-right: 1px solid var(--md-sys-color-outline-variant);
+      z-index: 30;
+      gap: 12px;
+      user-select: none;
+    }
+
+    /* Persistent / Modal Navigation Drawer */
+    .nav-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 300px;
+      max-width: 84vw;
+      background-color: var(--md-sys-color-surface-container-low);
+      border-right: 1px solid var(--md-sys-color-outline-variant);
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-104%);
+      transition: transform var(--transition-standard), background-color var(--transition-standard);
+      box-shadow: var(--md-sys-elevation-3);
+      overflow: hidden;
+    }
+
+    .nav-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-scrim {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 55;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-standard);
+      backdrop-filter: blur(2px);
+    }
+
+    .drawer-scrim.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .workspace {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      background-color: var(--md-sys-color-background);
+    }
+
+    /* M3 Top App Bar */
+    .top-app-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 18px;
+      min-height: 64px;
+      background-color: var(--md-sys-color-surface);
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      z-index: 20;
+      flex-shrink: 0;
+    }
+
+    .content-split {
+      display: grid;
+      grid-template-columns: 1fr;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .feed-pane {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--md-sys-color-surface);
+      border-right: 1px solid var(--md-sys-color-outline-variant);
+    }
+
+    .reader-pane {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--md-sys-color-surface-container-lowest);
+      position: fixed;
+      inset: 0;
+      z-index: 45;
+      transform: translateX(102%);
+      transition: transform var(--transition-standard), background-color var(--transition-standard);
+    }
+
+    .reader-pane.mobile-open {
+      transform: translateX(0);
+    }
+
+    /* M3 Navigation Bar (Mobile) */
+    .bottom-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      min-height: 72px;
+      padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px));
+      background-color: var(--md-sys-color-surface-container);
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      z-index: 35;
+    }
+
+    /* Responsive Breakpoints */
+    @media (min-width: 600px) and (max-width: 1024px) {
+      .app-shell {
+        grid-template-columns: 80px 1fr;
+        grid-template-rows: 1fr;
+      }
+      .nav-rail {
+        display: flex;
+      }
+      .bottom-nav {
+        display: none;
+      }
+      .feed-scroll-container.view-cards .articles-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .reader-pane {
+        left: 80px;
+        box-shadow: var(--md-sys-elevation-3);
+      }
+    }
+
+    @media (min-width: 1025px) {
+      .app-shell {
+        grid-template-columns: 280px 1fr;
+        grid-template-rows: 1fr;
+      }
+      .nav-drawer {
+        position: static;
+        transform: none !important;
+        box-shadow: none;
+        width: 280px;
+        max-width: none;
+      }
+      .drawer-scrim,
+      .bottom-nav,
+      .mobile-menu-btn,
+      .reader-mobile-back {
+        display: none !important;
+      }
+      .content-split {
+        grid-template-columns: minmax(380px, 460px) 1fr;
+      }
+      .reader-pane {
+        position: static;
+        transform: none !important;
+        z-index: 1;
+      }
+    }
+
+    /* M3 Drawer Components */
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 20px 14px;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background-color: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--md-sys-elevation-1);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.01em;
+      color: var(--md-sys-color-on-surface);
+      line-height: 1.15;
+    }
+
+    .brand-subtitle {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--md-sys-color-outline);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .drawer-fab-wrap {
+      padding: 8px 16px 16px;
+    }
+
+    .m3-fab-extended {
+      width: 100%;
+      min-height: 52px;
+      border-radius: var(--radius-md);
+      background-color: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: var(--md-sys-elevation-1);
+      transition: all var(--transition-fast);
+    }
+
+    .m3-fab-extended:hover {
+      box-shadow: var(--md-sys-elevation-2);
+      transform: translateY(-1px);
+    }
+
+    .drawer-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 12px 16px;
+    }
+
+    .drawer-section-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 14px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--md-sys-color-outline);
+    }
+
+    .nav-pill-item {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: transparent;
+      color: var(--md-sys-color-on-surface);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: background-color var(--transition-fast), color var(--transition-fast);
+      margin-bottom: 3px;
+    }
+
+    .nav-pill-item:hover {
+      background-color: var(--md-sys-color-surface-container-high);
+    }
+
+    .nav-pill-item.active {
+      background-color: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      font-weight: 600;
+    }
+
+    .nav-pill-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .nav-pill-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-badge {
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background-color: var(--md-sys-color-surface-container-highest);
+      color: var(--md-sys-color-on-surface);
+      flex-shrink: 0;
+    }
+
+    .nav-pill-item.active .nav-badge {
+      background-color: rgba(0, 0, 0, 0.1);
+      color: inherit;
+    }
+
+    .feed-delete-btn {
+      opacity: 0;
+      border: none;
+      background: transparent;
+      color: var(--md-sys-color-outline);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+
+    .nav-pill-item:hover .feed-delete-btn {
+      opacity: 1;
+    }
+
+    .feed-delete-btn:hover {
+      color: var(--md-sys-color-on-surface);
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .drawer-footer {
+      padding: 14px 16px;
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background-color: var(--md-sys-color-surface-container-low);
+    }
+
+    .drawer-util-btn {
+      min-height: 40px;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background-color: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface);
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .drawer-util-btn:hover {
+      background-color: var(--md-sys-color-surface-container-high);
+      border-color: var(--md-sys-color-primary);
+    }
+
+    /* M3 Navigation Rail Components */
+    .rail-fab {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-md);
+      background-color: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--md-sys-elevation-1);
+      margin-bottom: 8px;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .rail-fab:hover {
+      box-shadow: var(--md-sys-elevation-2);
+      transform: scale(1.04);
+    }
+
+    .rail-item,
+    .bottom-nav-item {
+      border: none;
+      background: transparent;
+      color: var(--md-sys-color-secondary);
+      font-family: var(--font-sans);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      min-width: 64px;
+      min-height: 56px;
+      padding: 4px 6px;
+      position: relative;
+      transition: color var(--transition-fast);
+    }
+
+    .rail-pill,
+    .bottom-nav-pill {
+      width: 60px;
+      height: 32px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--transition-fast);
+    }
+
+    .rail-item:hover .rail-pill,
+    .bottom-nav-item:hover .bottom-nav-pill {
+      background-color: var(--md-sys-color-surface-container-high);
+    }
+
+    .rail-item.active,
+    .bottom-nav-item.active {
+      color: var(--md-sys-color-on-surface);
+      font-weight: 600;
+    }
+
+    .rail-item.active .rail-pill,
+    .bottom-nav-item.active .bottom-nav-pill {
+      background-color: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+
+    .rail-label,
+    .bottom-nav-label {
+      font-size: 0.72rem;
+      line-height: 1.1;
+    }
+
+    /* M3 Top App Bar Controls */
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .current-feed-heading {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .current-feed-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--md-sys-color-on-surface);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .current-feed-meta {
+      font-size: 0.75rem;
+      color: var(--md-sys-color-outline);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 360px;
+      min-width: 140px;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 36px 0 40px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      background-color: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface);
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .search-input::placeholder {
+      color: var(--md-sys-color-outline);
+    }
+
+    .search-input:focus {
+      border-color: var(--md-sys-color-primary);
+      background-color: var(--md-sys-color-surface-container-lowest);
+      box-shadow: 0 0 0 3px var(--md-sys-color-primary-container);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--md-sys-color-outline);
+      pointer-events: none;
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      color: var(--md-sys-color-outline);
+      cursor: pointer;
+      padding: 4px;
+      display: none;
+      border-radius: 50%;
+    }
+
+    .search-clear-btn.visible {
+      display: inline-flex;
+    }
+
+    .top-bar-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .icon-btn {
+      min-width: 42px;
+      min-height: 42px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--md-sys-color-on-surface);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 10px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all var(--transition-fast);
+    }
+
+    .icon-btn:hover {
+      background-color: var(--md-sys-color-surface-container-high);
+    }
+
+    .icon-btn.active {
+      background-color: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+
+    /* M3 Segmented Button */
+    .segmented-group {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--radius-pill);
+      padding: 2px;
+      background-color: var(--md-sys-color-surface-container-low);
+    }
+
+    .seg-btn {
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: transparent;
+      color: var(--md-sys-color-secondary);
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .seg-btn.active {
+      background-color: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+
+    /* M3 Filter Chips Subbar */
+    .feed-subbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 16px;
+      background-color: var(--md-sys-color-surface);
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      flex-shrink: 0;
+      overflow-x: auto;
+    }
+
+    .chip-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: nowrap;
+    }
+
+    .m3-chip {
+      min-height: 34px;
+      padding: 0 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background-color: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition-fast);
+    }
+
+    .m3-chip:hover {
+      background-color: var(--md-sys-color-surface-container-high);
+    }
+
+    .m3-chip.active {
+      background-color: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    .mark-all-btn {
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background-color: transparent;
+      color: var(--md-sys-color-on-surface);
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition-fast);
+    }
+
+    .mark-all-btn:hover {
+      background-color: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      border-color: transparent;
+    }
+
+    /* M3 Article Stream Views */
+    .feed-scroll-container {
+      flex: 1;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      padding: 0;
+    }
+
+    .feed-scroll-container.view-cards {
+      padding: 16px;
+    }
+
+    .articles-list {
+      display: flex;
+      flex-direction: column;
+      list-style: none;
+    }
+
+    .feed-scroll-container.view-cards .articles-list {
+      gap: 14px;
+    }
+
+    /* M3 Compact Row */
+    .article-item.compact-row {
+      display: grid;
+      grid-template-columns: 28px 28px minmax(90px, 120px) 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      min-height: 50px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      background-color: var(--md-sys-color-surface);
+      cursor: pointer;
+      transition: background-color var(--transition-fast);
+      position: relative;
+    }
+
+    .article-item.compact-row:hover {
+      background-color: var(--md-sys-color-surface-container-high);
+    }
+
+    .article-item.compact-row.selected {
+      background-color: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      box-shadow: inset 4px 0 0 var(--md-sys-color-primary);
+    }
+
+    .article-item.compact-row.is-read {
+      background-color: var(--md-sys-color-surface-container-low);
+      opacity: 0.85;
+    }
+
+    .unread-dot-btn {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .unread-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--md-sys-color-primary);
+      transition: all var(--transition-fast);
+    }
+
+    .article-item.is-read .unread-dot {
+      background-color: transparent;
+      border: 1.5px solid var(--md-sys-color-outline);
+      opacity: 0.5;
+    }
+
+    .star-btn {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: transparent;
+      color: var(--md-sys-color-outline);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: all var(--transition-fast);
+    }
+
+    .star-btn:hover,
+    .star-btn.starred {
+      color: var(--md-sys-color-primary);
+    }
+
+    .compact-source {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--md-sys-color-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .compact-main {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.9rem;
+      min-width: 0;
+    }
+
+    .compact-title {
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface);
+    }
+
+    .article-item.compact-row.is-read .compact-title {
+      font-weight: 400;
+    }
+
+    .compact-snippet {
+      color: var(--md-sys-color-outline);
+      font-weight: 400;
+      margin-left: 6px;
+    }
+
+    .compact-time {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--md-sys-color-outline);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 599px) {
+      .article-item.compact-row {
+        grid-template-columns: 24px 28px 1fr auto;
+      }
+      .compact-source {
+        display: none;
+      }
+    }
+
+    /* M3 Elevated Cards */
+    .article-item.card-item {
+      background-color: var(--md-sys-color-surface-container-low);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      box-shadow: var(--md-sys-elevation-1);
+      transition: all var(--transition-fast);
+    }
+
+    .article-item.card-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--md-sys-elevation-2);
+      border-color: var(--md-sys-color-outline);
+    }
+
+    .article-item.card-item.selected {
+      border-color: var(--md-sys-color-primary);
+      box-shadow: 0 0 0 2px var(--md-sys-color-primary), var(--md-sys-elevation-2);
+    }
+
+    .article-item.card-item.is-read {
+      background-color: var(--md-sys-color-surface-container);
+      opacity: 0.85;
+    }
+
+    .card-top-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-feed-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      background-color: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--md-sys-color-on-surface);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-excerpt {
+      font-size: 0.86rem;
+      line-height: 1.55;
+      color: var(--md-sys-color-secondary);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 10px;
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      font-size: 0.76rem;
+      color: var(--md-sys-color-outline);
+    }
+
+    .card-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* M3 Reading Pane */
+    .reader-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 18px;
+      min-height: 58px;
+      background-color: var(--md-sys-color-surface);
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      flex-shrink: 0;
+    }
+
+    .reader-toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .reader-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 36px 28px 72px;
+      scroll-behavior: smooth;
+    }
+
+    .reader-article-container {
+      max-width: 68ch;
+      margin: 0 auto;
+    }
+
+    .reader-meta-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .reader-feed-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background-color: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+    }
+
+    .reader-timestamp {
+      font-size: 0.82rem;
+      color: var(--md-sys-color-outline);
+      font-family: var(--font-mono);
+    }
+
+    .reader-headline {
+      font-family: var(--reader-font-family);
+      font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 16px;
+      letter-spacing: -0.015em;
+    }
+
+    .reader-byline {
+      font-size: 0.88rem;
+      color: var(--md-sys-color-secondary);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .reader-body {
+      font-family: var(--reader-font-family);
+      font-size: var(--reader-font-size);
+      line-height: var(--reader-line-height);
+      color: var(--md-sys-color-on-surface);
+      word-break: break-word;
+    }
+
+    .reader-body p {
+      margin-bottom: 1.3em;
+    }
+
+    .reader-body h1,
+    .reader-body h2,
+    .reader-body h3,
+    .reader-body h4 {
+      font-family: var(--font-sans);
+      color: var(--md-sys-color-on-surface);
+      margin: 1.6em 0 0.6em;
+      line-height: 1.3;
+    }
+
+    .reader-body a {
+      color: var(--md-sys-color-primary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 500;
+    }
+
+    .reader-body ul,
+    .reader-body ol {
+      margin: 0 0 1.3em 1.4em;
+    }
+
+    .reader-body li {
+      margin-bottom: 0.45em;
+    }
+
+    .reader-body blockquote {
+      margin: 1.5em 0;
+      padding: 14px 20px;
+      border-left: 4px solid var(--md-sys-color-primary);
+      background-color: var(--md-sys-color-surface-container);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-style: italic;
+      color: var(--md-sys-color-secondary);
+    }
+
+    .reader-body pre,
+    .reader-body code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background-color: var(--md-sys-color-surface-container);
+      border-radius: var(--radius-xs);
+    }
+
+    .reader-body pre {
+      padding: 14px;
+      overflow-x: auto;
+      margin-bottom: 1.3em;
+      border: 1px solid var(--md-sys-color-outline-variant);
+    }
+
+    .reader-body img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius-sm);
+      margin: 1.2em 0;
+      display: block;
+    }
+
+    .reader-cta-box {
+      margin-top: 36px;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      background-color: var(--md-sys-color-surface-container);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* M3 Action Buttons */
+    .m3-btn-filled {
+      min-height: 44px;
+      padding: 0 20px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background-color: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: var(--md-sys-elevation-1);
+      transition: all var(--transition-fast);
+    }
+
+    .m3-btn-filled:hover {
+      box-shadow: var(--md-sys-elevation-2);
+      transform: translateY(-1px);
+    }
+
+    .m3-btn-tonal {
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background-color: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface);
+      font-family: var(--font-sans);
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .m3-btn-tonal:hover {
+      background-color: var(--md-sys-color-surface-container-highest);
+    }
+
+    /* Empty States */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px 24px;
+      height: 100%;
+      color: var(--md-sys-color-secondary);
+      gap: 12px;
+    }
+
+    .empty-icon-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: var(--md-sys-color-surface-container-highest);
+      color: var(--md-sys-color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+
+    /* M3 Dialogs & Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 90;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .m3-dialog {
+      width: 100%;
+      max-width: 540px;
+      max-height: 88vh;
+      background-color: var(--md-sys-color-surface-container-high);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--md-sys-elevation-3);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: dialogIn 200ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    @keyframes dialogIn {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .dialog-header {
+      padding: 22px 24px 14px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .dialog-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--md-sys-color-on-surface);
+    }
+
+    .dialog-body {
+      padding: 22px 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .dialog-footer {
+      padding: 16px 24px 20px;
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      background-color: var(--md-sys-color-surface-container-high);
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--md-sys-color-secondary);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background-color: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-on-surface);
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-textarea {
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--md-sys-color-primary);
+      box-shadow: 0 0 0 3px var(--md-sys-color-primary-container);
+    }
+
+    /* Shortcuts Grid */
+    .shortcuts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .shortcut-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      background-color: var(--md-sys-color-surface);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      font-size: 0.85rem;
+    }
+
+    .kbd-badge {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background-color: var(--md-sys-color-surface-container-lowest);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      color: var(--md-sys-color-on-surface);
+    }
+
+    /* M3 Snackbar */
+    .snackbar-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    @media (max-width: 599px) {
+      .snackbar-container {
+        bottom: 84px;
+        width: calc(100% - 32px);
+      }
+    }
+
+    .m3-snackbar {
+      pointer-events: auto;
+      min-width: 280px;
+      max-width: 480px;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      background-color: var(--md-sys-color-on-surface);
+      color: var(--md-sys-color-surface);
+      box-shadow: var(--md-sys-elevation-3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      animation: dialogIn 180ms ease-out;
+    }
+
+    .snackbar-action {
+      border: none;
+      background: transparent;
+      color: var(--md-sys-color-primary-container);
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .spin {
+      animation: spinAnim 0.9s linear infinite;
+    }
+
+    @keyframes spinAnim {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      background-color: var(--md-sys-color-outline);
+    }
+
+    .status-dot.live {
+      background-color: #2E7D32;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <!-- NAVIGATION RAIL (Tablet 600px–1024px) -->
+    <aside class="nav-rail" aria-label="Tablet Navigation Rail">
+      <button class="rail-fab" id="rail-add-feed-btn" title="Add Feed">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      </button>
+
+      <button class="rail-item active" data-rail-filter="all" id="rail-filter-all" title="All Articles">
+        <span class="rail-pill">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="17" y2="8"></line><line x1="7" y1="12" x2="17" y2="12"></line><line x1="7" y1="16" x2="13" y2="16"></line></svg>
+        </span>
+        <span class="rail-label">All</span>
+      </button>
+
+      <button class="rail-item" data-rail-filter="unread" id="rail-filter-unread" title="Unread Only">
+        <span class="rail-pill">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+        </span>
+        <span class="rail-label">Unread</span>
+      </button>
+
+      <button class="rail-item" data-rail-filter="starred" id="rail-filter-starred" title="Starred">
+        <span class="rail-pill">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </span>
+        <span class="rail-label">Starred</span>
+      </button>
+
+      <button class="rail-item" id="rail-open-drawer-btn" title="Subscriptions & Folders">
+        <span class="rail-pill">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+        </span>
+        <span class="rail-label">Feeds</span>
+      </button>
+
+      <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px;">
+        <button class="rail-item" id="rail-shortcuts-btn" title="Keyboard Shortcuts (?)">
+          <span class="rail-pill">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"></path></svg>
+          </span>
+          <span class="rail-label">Keys</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- NAVIGATION DRAWER (Persistent on Desktop >1024px, Modal on Mobile/Tablet) -->
+    <div class="drawer-scrim" id="drawer-scrim"></div>
+    <aside class="nav-drawer" id="nav-drawer" aria-label="Subscriptions Navigation Drawer">
+      <div class="drawer-header">
+        <div class="brand-lockup">
+          <div class="brand-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1.5" fill="currentColor"></circle></svg>
+          </div>
+          <div>
+            <div class="brand-title">Rustic Reader</div>
+            <div class="brand-subtitle">Material You RSS</div>
+          </div>
+        </div>
+        <button class="icon-btn mobile-menu-btn" id="close-drawer-btn" title="Close Drawer" aria-label="Close Drawer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="drawer-fab-wrap">
+        <button class="m3-fab-extended" id="drawer-add-feed-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>Subscribe to Feed</span>
+        </button>
+      </div>
+
+      <div class="drawer-scroll">
+        <div class="drawer-section-label">Library</div>
+        <button class="nav-pill-item active" data-nav-stream="all" id="drawer-nav-all">
+          <span class="nav-pill-left">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="17" y2="8"></line><line x1="7" y1="12" x2="17" y2="12"></line><line x1="7" y1="16" x2="13" y2="16"></line></svg>
+            <span class="nav-pill-title">All Articles</span>
+          </span>
+          <span class="nav-badge" id="badge-all">0</span>
+        </button>
+
+        <button class="nav-pill-item" data-nav-stream="unread" id="drawer-nav-unread">
+          <span class="nav-pill-left">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+            <span class="nav-pill-title">Unread Only</span>
+          </span>
+          <span class="nav-badge" id="badge-unread">0</span>
+        </button>
+
+        <button class="nav-pill-item" data-nav-stream="starred" id="drawer-nav-starred">
+          <span class="nav-pill-left">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span class="nav-pill-title">Starred Items</span>
+          </span>
+          <span class="nav-badge" id="badge-starred">0</span>
+        </button>
+
+        <div id="drawer-folders-container"></div>
+      </div>
+
+      <div class="drawer-footer">
+        <button class="drawer-util-btn" id="open-opml-modal-btn" title="Import or Export OPML">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>OPML I/O</span>
+        </button>
+        <button class="drawer-util-btn" id="open-shortcuts-modal-btn" title="Keyboard Shortcuts (?)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M7 16h10"></path></svg>
+          <span>Shortcuts</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="workspace">
+      <header class="top-app-bar">
+        <div class="top-bar-left">
+          <button class="icon-btn mobile-menu-btn" id="open-drawer-btn" title="Open Drawer" aria-label="Open Drawer">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+
+          <div class="current-feed-heading">
+            <div class="current-feed-title">
+              <span id="active-stream-title">All Articles</span>
+              <span class="status-dot live" id="network-status-dot" title="Proxy Feed Engine Active"></span>
+            </div>
+            <div class="current-feed-meta" id="active-stream-subtitle">3 feeds synced • Press ? for shortcuts</div>
+          </div>
+        </div>
+
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="search" id="search-input" class="search-input" placeholder="Search headlines or content (/)" aria-label="Search articles" />
+          <button class="search-clear-btn" id="search-clear-btn" title="Clear Search" aria-label="Clear Search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+
+        <div class="top-bar-actions">
+          <div class="segmented-group" role="group" aria-label="View Mode Switcher">
+            <button class="seg-btn active" id="view-compact-btn" title="Compact List View (1)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              <span>Compact</span>
+            </button>
+            <button class="seg-btn" id="view-cards-btn" title="Expanded Card View (2)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+              <span>Cards</span>
+            </button>
+          </div>
+
+          <button class="icon-btn" id="refresh-feeds-btn" title="Refresh Feeds (r)" aria-label="Refresh Feeds">
+            <svg id="refresh-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          </button>
+
+          <button class="icon-btn" id="theme-toggle-btn" title="Toggle Light/Dark Theme" aria-label="Toggle Light or Dark Theme">
+            <svg id="theme-icon-sun" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg id="theme-icon-moon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+
+          <button class="icon-btn" id="install-pwa-btn" title="Install Rustic Reader" style="display:none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Install</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dual-Pane Split -->
+      <div class="content-split">
+        <section class="feed-pane" aria-label="Article Stream">
+          <div class="feed-subbar">
+            <div class="chip-group" role="tablist" aria-label="Stream Status Filter">
+              <button class="m3-chip active" data-chip-filter="all" id="chip-filter-all">All</button>
+              <button class="m3-chip" data-chip-filter="unread" id="chip-filter-unread">Unread</button>
+              <button class="m3-chip" data-chip-filter="starred" id="chip-filter-starred">Starred</button>
+            </div>
+
+            <button class="mark-all-btn" id="mark-all-read-btn" title="Mark all visible articles as read (Shift+A)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Mark All Read</span>
+            </button>
+          </div>
+
+          <div class="feed-scroll-container view-compact" id="feed-scroll-container">
+            <ul class="articles-list" id="articles-list" role="listbox" aria-label="Articles"></ul>
+          </div>
+        </section>
+
+        <!-- Right Reading View -->
+        <article class="reader-pane" id="reader-pane" aria-label="Article Reader">
+          <div class="reader-toolbar">
+            <div class="reader-toolbar-group">
+              <button class="icon-btn reader-mobile-back" id="reader-back-btn" title="Back to Feed">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <span>Feed</span>
+              </button>
+
+              <button class="icon-btn" id="reader-prev-btn" title="Previous Article (k)" aria-label="Previous Article">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+              </button>
+              <button class="icon-btn" id="reader-next-btn" title="Next Article (j)" aria-label="Next Article">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </button>
+            </div>
+
+            <div class="reader-toolbar-group">
+              <button class="icon-btn" id="reader-toggle-read-btn" title="Toggle Read/Unread (m)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+                <span id="reader-read-label">Unread</span>
+              </button>
+
+              <button class="icon-btn" id="reader-toggle-star-btn" title="Toggle Star (s)">
+                <svg id="reader-star-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span id="reader-star-label">Star</span>
+              </button>
+
+              <button class="icon-btn" id="reader-font-toggle-btn" title="Toggle Serif / Sans Typography">
+                <span style="font-family: var(--font-serif); font-weight: 700; font-size: 0.95rem;">Aa</span>
+              </button>
+
+              <button class="icon-btn" id="reader-open-original-btn" title="Open Original Article (v)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="reader-scroll" id="reader-scroll">
+            <div id="reader-content-root"></div>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- BOTTOM NAV (Mobile <600px) -->
+    <nav class="bottom-nav" aria-label="Mobile Navigation Bar">
+      <button class="bottom-nav-item active" data-mobile-filter="all" id="mobile-nav-all">
+        <span class="bottom-nav-pill">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="17" y2="8"></line><line x1="7" y1="12" x2="17" y2="12"></line><line x1="7" y1="16" x2="13" y2="16"></line></svg>
+        </span>
+        <span class="bottom-nav-label">All</span>
+      </button>
+
+      <button class="bottom-nav-item" data-mobile-filter="unread" id="mobile-nav-unread">
+        <span class="bottom-nav-pill">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+        </span>
+        <span class="bottom-nav-label">Unread</span>
+      </button>
+
+      <button class="bottom-nav-item" data-mobile-filter="starred" id="mobile-nav-starred">
+        <span class="bottom-nav-pill">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </span>
+        <span class="bottom-nav-label">Starred</span>
+      </button>
+
+      <button class="bottom-nav-item" id="mobile-nav-feeds">
+        <span class="bottom-nav-pill">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+        </span>
+        <span class="bottom-nav-label">Feeds</span>
+      </button>
+
+      <button class="bottom-nav-item" id="mobile-nav-add">
+        <span class="bottom-nav-pill">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </span>
+        <span class="bottom-nav-label">Add</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODALS -->
+  <div class="modal-backdrop" id="add-feed-modal" role="dialog" aria-modal="true" aria-labelledby="add-feed-title">
+    <div class="m3-dialog">
+      <div class="dialog-header">
+        <h2 class="dialog-title" id="add-feed-title">Subscribe to RSS or Atom Feed</h2>
+        <button class="icon-btn" id="close-add-feed-modal" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <form id="add-feed-form" class="dialog-body">
+        <div class="form-field">
+          <label class="form-label" for="feed-url-input">Feed XML URL (RSS 2.0 or Atom 1.0)</label>
+          <input type="url" id="feed-url-input" class="form-input" placeholder="https://hnrss.org/newest" required />
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="feed-title-input">Display Name (optional)</label>
+          <input type="text" id="feed-title-input" class="form-input" placeholder="e.g. Ars Technica" />
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="feed-category-input">Folder / Category Tag</label>
+          <input type="text" id="feed-category-input" class="form-input" value="Tech & Engineering" placeholder="e.g. Tech & Engineering, Science, Culture" />
+        </div>
+        <div class="form-field">
+          <span class="form-label">Quick-Add Curated Feeds</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <button type="button" class="m3-chip preset-feed-btn" data-url="https://feeds.arstechnica.com/arstechnica/index" data-title="Ars Technica" data-cat="Tech & Engineering">+ Ars Technica</button>
+            <button type="button" class="m3-chip preset-feed-btn" data-url="https://www.theverge.com/rss/index.xml" data-title="The Verge" data-cat="Tech & Engineering">+ The Verge</button>
+            <button type="button" class="m3-chip preset-feed-btn" data-url="https://www.nasa.gov/rss/dyn/breaking_news.rss" data-title="NASA Breaking News" data-cat="Science & Space">+ NASA News</button>
+          </div>
+        </div>
+      </form>
+      <div class="dialog-footer">
+        <button type="button" class="m3-btn-tonal" id="cancel-add-feed-btn">Cancel</button>
+        <button type="submit" form="add-feed-form" class="m3-btn-filled" id="submit-add-feed-btn">Add Subscription</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="opml-modal" role="dialog" aria-modal="true" aria-labelledby="opml-modal-title">
+    <div class="m3-dialog">
+      <div class="dialog-header">
+        <h2 class="dialog-title" id="opml-modal-title">OPML 2.0 Import & Export</h2>
+        <button class="icon-btn" id="close-opml-modal" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <div class="form-field">
+          <label class="form-label" for="opml-file-input">Import from `.opml` or `.xml` File</label>
+          <input type="file" id="opml-file-input" class="form-input" accept=".opml,.xml,text/xml" />
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="opml-textarea">Or Paste Raw OPML XML</label>
+          <textarea id="opml-textarea" class="form-textarea" placeholder="<?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?><opml version=&quot;2.0&quot;>..."></textarea>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button type="button" class="m3-btn-tonal" id="export-opml-download-btn">Download .OPML</button>
+        <button type="button" class="m3-btn-tonal" id="copy-opml-btn">Copy XML</button>
+        <button type="button" class="m3-btn-filled" id="import-opml-btn">Import OPML</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="shortcuts-modal" role="dialog" aria-modal="true" aria-labelledby="shortcuts-modal-title">
+    <div class="m3-dialog">
+      <div class="dialog-header">
+        <h2 class="dialog-title" id="shortcuts-modal-title">Keyboard Shortcuts</h2>
+        <button class="icon-btn" id="close-shortcuts-modal" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <div class="shortcuts-grid">
+          <div class="shortcut-row"><span>Next article</span><kbd class="kbd-badge">j</kbd></div>
+          <div class="shortcut-row"><span>Previous article</span><kbd class="kbd-badge">k</kbd></div>
+          <div class="shortcut-row"><span>Toggle star</span><kbd class="kbd-badge">s</kbd></div>
+          <div class="shortcut-row"><span>Toggle read / unread</span><kbd class="kbd-badge">m</kbd></div>
+          <div class="shortcut-row"><span>Open original in tab</span><kbd class="kbd-badge">v</kbd></div>
+          <div class="shortcut-row"><span>Refresh all feeds</span><kbd class="kbd-badge">r</kbd></div>
+          <div class="shortcut-row"><span>Mark all as read</span><kbd class="kbd-badge">Shift + A</kbd></div>
+          <div class="shortcut-row"><span>Shortcuts cheat sheet</span><kbd class="kbd-badge">?</kbd></div>
+          <div class="shortcut-row"><span>Compact list view</span><kbd class="kbd-badge">1</kbd></div>
+          <div class="shortcut-row"><span>Expanded card view</span><kbd class="kbd-badge">2</kbd></div>
+          <div class="shortcut-row"><span>Focus search box</span><kbd class="kbd-badge">/</kbd></div>
+          <div class="shortcut-row"><span>Close dialog / reader</span><kbd class="kbd-badge">Esc</kbd></div>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button type="button" class="m3-btn-filled" id="done-shortcuts-btn">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="snackbar-container" id="snackbar-container" aria-live="polite"></div>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch((err) => {
+          console.warn('SW registration skipped or sandboxed:', err);
+        });
+      });
+    }
+  </script>
+
+  <!-- Application Engine Script -->
+  <script>
+    (function () {
+      'use strict';
+
+      const STORAGE_KEYS = {
+        FEEDS: 'rustic_reader_feeds_v1',
+        READ_IDS: 'rustic_reader_read_ids_v1',
+        STARRED_IDS: 'rustic_reader_starred_ids_v1',
+        STARRED_ITEMS: 'rustic_reader_starred_items_v1',
+        THEME: 'rustic_reader_theme_v1',
+        VIEW_MODE: 'rustic_reader_view_mode_v1',
+        FONT_STYLE: 'rustic_reader_font_style_v1'
+      };
+
+      function safeGetStorage(key, fallback) {
+        try {
+          const raw = window.localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (err) {
+          return fallback;
+        }
+      }
+
+      function safeSetStorage(key, value) {
+        try {
+          window.localStorage.setItem(key, JSON.stringify(value));
+        } catch (err) {}
+      }
+
+      const DEFAULT_FEEDS = [
+        {
+          id: 'feed-hn',
+          title: 'Hacker News',
+          url: 'https://hnrss.org/frontpage',
+          siteUrl: 'https://news.ycombinator.com',
+          category: 'Tech & Engineering'
+        },
+        {
+          id: 'feed-gnews-tech',
+          title: 'Google News Tech',
+          url: 'https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=en-US&gl=US&ceid=US:en',
+          siteUrl: 'https://news.google.com',
+          category: 'Tech & Engineering'
+        },
+        {
+          id: 'feed-npr',
+          title: 'NPR News',
+          url: 'https://feeds.npr.org/1001/rss.xml',
+          siteUrl: 'https://www.npr.org',
+          category: 'News & Culture'
+        }
+      ];
+
+      const FALLBACK_ARTICLES = {
+        'feed-hn': [
+          {
+            id: 'hn-local-first-pwa-architecture',
+            feedId: 'feed-hn',
+            feedTitle: 'Hacker News',
+            category: 'Tech & Engineering',
+            title: 'Zero-Build Single-File PWAs and the Return of Client-Side RSS Parsing',
+            link: 'https://news.ycombinator.com/item?id=41829104',
+            author: 'dang_arch',
+            pubDate: new Date(Date.now() - 28 * 60 * 1000).toISOString(),
+            content: `<p>Modern web browsers ship with a remarkably complete runtime: native <code>DOMParser</code> for XML/Atom ingestion, CSS Custom Properties for zero-runtime theming, and Service Workers for standalone installation.</p>`
+          }
+        ]
+      };
+
+      const state = {
+        feeds: safeGetStorage(STORAGE_KEYS.FEEDS, DEFAULT_FEEDS),
+        articles: [],
+        readIds: new Set(safeGetStorage(STORAGE_KEYS.READ_IDS, [])),
+        starredIds: new Set(safeGetStorage(STORAGE_KEYS.STARRED_IDS, [])),
+        starredItemsMap: safeGetStorage(STORAGE_KEYS.STARRED_ITEMS, {}),
+        activeStream: 'all',
+        statusFilter: 'all',
+        searchQuery: '',
+        viewMode: safeGetStorage(STORAGE_KEYS.VIEW_MODE, 'compact'),
+        selectedArticleId: null,
+        theme: safeGetStorage(STORAGE_KEYS.THEME, null),
+        fontStyle: safeGetStorage(STORAGE_KEYS.FONT_STYLE, 'serif'),
+        isRefreshing: false,
+        liveFetchCount: 0,
+        lastUndoReadSnapshot: null
+      };
+
+      function resolveEffectiveTheme() {
+        if (state.theme === 'light' || state.theme === 'dark') return state.theme;
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+        return 'light';
+      }
+
+      function applyTheme() {
+        const effective = resolveEffectiveTheme();
+        document.documentElement.setAttribute('data-theme', effective);
+        const sunIcon = document.getElementById('theme-icon-sun');
+        const moonIcon = document.getElementById('theme-icon-moon');
+        const metaTheme = document.getElementById('meta-theme-color');
+        if (sunIcon && moonIcon) {
+          sunIcon.style.display = effective === 'dark' ? 'block' : 'none';
+          moonIcon.style.display = effective === 'dark' ? 'none' : 'block';
+        }
+        if (metaTheme) {
+          metaTheme.setAttribute('content', effective === 'dark' ? '#1F201C' : '#5B6400');
+        }
+      }
+
+      function toggleTheme() {
+        const current = resolveEffectiveTheme();
+        state.theme = current === 'dark' ? 'light' : 'dark';
+        safeSetStorage(STORAGE_KEYS.THEME, state.theme);
+        applyTheme();
+        showSnackbar(`Switched to Material ${state.theme === 'dark' ? 'Dark' : 'Light'} theme`);
+      }
+
+      function applyReaderTypography() {
+        document.documentElement.style.setProperty(
+          '--reader-font-family',
+          state.fontStyle === 'serif' ? 'var(--font-serif)' : 'var(--font-sans)'
+        );
+      }
+
+      async function fetchWithTimeout(url, timeoutMs = 6500) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          const response = await fetch(url, { signal: controller.signal });
+          clearTimeout(timer);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return await response.text();
+        } catch (err) {
+          clearTimeout(timer);
+          throw err;
+        }
+      }
+
+      async function fetchFeedXmlWithCorsFallback(feedUrl) {
+        const primaryUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(feedUrl)}`;
+        const fallbackUrl = `https://corsproxy.io/?${encodeURIComponent(feedUrl)}`;
+        try {
+          const xml = await fetchWithTimeout(primaryUrl, 6000);
+          if (xml && (xml.includes('<rss') || xml.includes('<feed') || xml.includes('<RDF'))) return xml;
+          throw new Error('Invalid XML');
+        } catch (primaryErr) {
+          const xmlFallback = await fetchWithTimeout(fallbackUrl, 6000);
+          if (xmlFallback && (xmlFallback.includes('<rss') || xmlFallback.includes('<feed') || xmlFallback.includes('<RDF'))) return xmlFallback;
+          throw new Error('All CORS proxies failed');
+        }
+      }
+
+      function cleanHtmlSnippet(htmlString) {
+        if (!htmlString) return '';
+        const doc = new DOMParser().parseFromString(htmlString, 'text/html');
+        return (doc.body.textContent || '').replace(/\s+/g, ' ').trim();
+      }
+
+      function sanitizeArticleHtml(rawHtml) {
+        if (!rawHtml) return '<p>No content provided in feed item.</p>';
+        const doc = new DOMParser().parseFromString(rawHtml, 'text/html');
+        doc.querySelectorAll('script, iframe, object, embed, form, style, link, meta').forEach((el) => el.remove());
+        doc.body.querySelectorAll('*').forEach((el) => {
+          Array.from(el.attributes).forEach((attr) => {
+            const name = attr.name.toLowerCase();
+            if (name.startsWith('on') || (name === 'href' && attr.value.trim().toLowerCase().startsWith('javascript:'))) {
+              el.removeAttribute(attr.name);
+            }
+          });
+          if (el.tagName === 'A') {
+            el.setAttribute('target', '_blank');
+            el.setAttribute('rel', 'noopener noreferrer');
+          }
+        });
+        const cleaned = doc.body.innerHTML.trim();
+        return cleaned || '<p>No content available.</p>';
+      }
+
+      function getDirectChildText(parent, tagNames) {
+        for (const tag of tagNames) {
+          const el = parent.getElementsByTagName(tag)[0];
+          if (el && el.textContent) return el.textContent.trim();
+        }
+        return '';
+      }
+
+      function parseFeedXml(xmlString, feedMeta) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+        if (xmlDoc.querySelector('parsererror')) throw new Error('XML Parser error');
+
+        const parsedItems = [];
+        const atomEntries = Array.from(xmlDoc.getElementsByTagName('entry'));
+        const rssItems = Array.from(xmlDoc.getElementsByTagName('item'));
+
+        if (atomEntries.length > 0) {
+          atomEntries.slice(0, 25).forEach((entry, idx) => {
+            const title = getDirectChildText(entry, ['title']) || 'Untitled Entry';
+            let link = '';
+            const linkEls = Array.from(entry.getElementsByTagName('link'));
+            const altLink = linkEls.find((l) => !l.getAttribute('rel') || l.getAttribute('rel') === 'alternate');
+            if (altLink && altLink.getAttribute('href')) link = altLink.getAttribute('href').trim();
+            else if (linkEls[0] && linkEls[0].getAttribute('href')) link = linkEls[0].getAttribute('href').trim();
+
+            const rawId = getDirectChildText(entry, ['id']) || link || `${feedMeta.id}-atom-${idx}`;
+            const pubDateRaw = getDirectChildText(entry, ['published', 'updated']);
+            const parsedDate = pubDateRaw ? new Date(pubDateRaw) : new Date();
+            const pubDate = isNaN(parsedDate.getTime()) ? new Date().toISOString() : parsedDate.toISOString();
+            const authorEl = entry.getElementsByTagName('author')[0];
+            const author = authorEl ? getDirectChildText(authorEl, ['name']) : feedMeta.title;
+            const contentRaw = getDirectChildText(entry, ['content', 'summary']) || '';
+
+            parsedItems.push({
+              id: `${feedMeta.id}::${rawId}`,
+              feedId: feedMeta.id,
+              feedTitle: feedMeta.title,
+              category: feedMeta.category || 'Subscriptions',
+              title,
+              link: link || feedMeta.siteUrl || feedMeta.url,
+              author: author || feedMeta.title,
+              pubDate,
+              content: sanitizeArticleHtml(contentRaw),
+              snippet: cleanHtmlSnippet(contentRaw).slice(0, 240)
+            });
+          });
+        } else if (rssItems.length > 0) {
+          rssItems.slice(0, 25).forEach((item, idx) => {
+            const title = getDirectChildText(item, ['title']) || 'Untitled Article';
+            const link = getDirectChildText(item, ['link']) || feedMeta.siteUrl || feedMeta.url;
+            const guid = getDirectChildText(item, ['guid']) || link || `${feedMeta.id}-rss-${idx}`;
+            const pubDateRaw = getDirectChildText(item, ['pubDate', 'dc:date', 'date']);
+            const parsedDate = pubDateRaw ? new Date(pubDateRaw) : new Date();
+            const pubDate = isNaN(parsedDate.getTime()) ? new Date().toISOString() : parsedDate.toISOString();
+            const author = getDirectChildText(item, ['dc:creator', 'author', 'creator']) || feedMeta.title;
+            const contentEncoded = getDirectChildText(item, ['content:encoded', 'encoded', 'description']);
+
+            parsedItems.push({
+              id: `${feedMeta.id}::${guid}`,
+              feedId: feedMeta.id,
+              feedTitle: feedMeta.title,
+              category: feedMeta.category || 'Subscriptions',
+              title,
+              link,
+              author,
+              pubDate,
+              content: sanitizeArticleHtml(contentEncoded),
+              snippet: cleanHtmlSnippet(contentEncoded).slice(0, 240)
+            });
+          });
+        }
+
+        return parsedItems;
+      }
+
+      async function refreshAllFeeds(showToastOnComplete = false) {
+        if (state.isRefreshing) return;
+        state.isRefreshing = true;
+        const refreshIcon = document.getElementById('refresh-icon');
+        if (refreshIcon) refreshIcon.classList.add('spin');
+
+        let liveSuccessCount = 0;
+        const allFetched = [];
+
+        await Promise.all(
+          state.feeds.map(async (feed) => {
+            try {
+              const xmlText = await fetchFeedXmlWithCorsFallback(feed.url);
+              const items = parseFeedXml(xmlText, feed);
+              if (items.length > 0) {
+                liveSuccessCount += 1;
+                allFetched.push(...items);
+                return;
+              }
+              throw new Error('Empty');
+            } catch (err) {
+              const fallbackList = FALLBACK_ARTICLES[feed.id] || [];
+              fallbackList.forEach((item) => {
+                allFetched.push({ ...item, snippet: cleanHtmlSnippet(item.content).slice(0, 240) });
+              });
+            }
+          })
+        );
+
+        Object.values(state.starredItemsMap).forEach((savedItem) => {
+          if (!allFetched.some((a) => a.id === savedItem.id)) allFetched.push(savedItem);
+        });
+
+        allFetched.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+        state.articles = allFetched;
+        state.liveFetchCount = liveSuccessCount;
+        state.isRefreshing = false;
+
+        if (refreshIcon) refreshIcon.classList.remove('spin');
+
+        const visible = getFilteredArticles();
+        if (!state.selectedArticleId && visible.length > 0 && window.innerWidth > 1024) {
+          state.selectedArticleId = visible[0].id;
+        }
+
+        renderAll();
+        if (showToastOnComplete) {
+          showSnackbar(
+            liveSuccessCount > 0
+              ? `Synced ${allFetched.length} articles across ${state.feeds.length} feeds`
+              : `Loaded ${allFetched.length} cached articles`
+          );
+        }
+      }
+
+      function isArticleRead(id) { return state.readIds.has(id); }
+      function isArticleStarred(id) { return state.starredIds.has(id); }
+
+      function persistReadIds() {
+        safeSetStorage(STORAGE_KEYS.READ_IDS, Array.from(state.readIds));
+      }
+
+      function persistStarred() {
+        safeSetStorage(STORAGE_KEYS.STARRED_IDS, Array.from(state.starredIds));
+        safeSetStorage(STORAGE_KEYS.STARRED_ITEMS, state.starredItemsMap);
+      }
+
+      function setArticleRead(articleId, shouldBeRead) {
+        if (!articleId) return;
+        if (shouldBeRead) state.readIds.add(articleId);
+        else state.readIds.delete(articleId);
+        persistReadIds();
+        renderAll();
+      }
+
+      function toggleArticleRead(articleId) {
+        if (!articleId) return;
+        const nextState = !isArticleRead(articleId);
+        setArticleRead(articleId, nextState);
+        showSnackbar(nextState ? 'Marked as read' : 'Marked as unread');
+      }
+
+      function toggleArticleStar(articleId) {
+        if (!articleId) return;
+        const article = state.articles.find((a) => a.id === articleId);
+        if (state.starredIds.has(articleId)) {
+          state.starredIds.delete(articleId);
+          delete state.starredItemsMap[articleId];
+          showSnackbar('Removed from Starred');
+        } else {
+          state.starredIds.add(articleId);
+          if (article) state.starredItemsMap[articleId] = article;
+          showSnackbar('Added to Starred ★');
+        }
+        persistStarred();
+        renderAll();
+      }
+
+      function markAllVisibleAsRead() {
+        const visible = getFilteredArticles();
+        const unreadVisibleIds = visible.filter((a) => !isArticleRead(a.id)).map((a) => a.id);
+        if (unreadVisibleIds.length === 0) {
+          showSnackbar('All visible articles are already read');
+          return;
+        }
+        state.lastUndoReadSnapshot = unreadVisibleIds;
+        unreadVisibleIds.forEach((id) => state.readIds.add(id));
+        persistReadIds();
+        renderAll();
+        showSnackbar(`Marked ${unreadVisibleIds.length} articles as read`, 'Undo', () => {
+          if (state.lastUndoReadSnapshot) {
+            state.lastUndoReadSnapshot.forEach((id) => state.readIds.delete(id));
+            state.lastUndoReadSnapshot = null;
+            persistReadIds();
+            renderAll();
+            showSnackbar('Restored unread state');
+          }
+        });
+      }
+
+      function getFilteredArticles() {
+        return state.articles.filter((article) => {
+          if (state.activeStream === 'unread' && isArticleRead(article.id)) return false;
+          if (state.activeStream === 'starred' && !isArticleStarred(article.id)) return false;
+          if (state.activeStream.startsWith('feed:')) {
+            if (article.feedId !== state.activeStream.slice(5)) return false;
+          }
+          if (state.activeStream.startsWith('cat:')) {
+            if ((article.category || 'Subscriptions') !== state.activeStream.slice(4)) return false;
+          }
+
+          if (state.statusFilter === 'unread' && isArticleRead(article.id)) return false;
+          if (state.statusFilter === 'starred' && !isArticleStarred(article.id)) return false;
+
+          if (state.searchQuery.trim() !== '') {
+            const q = state.searchQuery.toLowerCase();
+            const matchTitle = article.title.toLowerCase().includes(q);
+            const matchSnippet = (article.snippet || '').toLowerCase().includes(q);
+            const matchFeed = (article.feedTitle || '').toLowerCase().includes(q);
+            if (!matchTitle && !matchSnippet && !matchFeed) return false;
+          }
+
+          return true;
+        });
+      }
+
+      function formatRelativeTime(isoDate) {
+        const d = new Date(isoDate);
+        if (isNaN(d.getTime())) return 'Now';
+        const diffSec = Math.max(1, Math.floor((Date.now() - d.getTime()) / 1000));
+        if (diffSec < 60) return `${diffSec}s`;
+        const diffMin = Math.floor(diffSec / 60);
+        if (diffMin < 60) return `${diffMin}m`;
+        const diffHr = Math.floor(diffMin / 60);
+        if (diffHr < 24) return `${diffHr}h`;
+        const diffDay = Math.floor(diffHr / 24);
+        if (diffDay < 7) return `${diffDay}d`;
+        return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      }
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function renderDrawerAndBadges() {
+        const unreadTotal = state.articles.filter((a) => !isArticleRead(a.id)).length;
+        const starredTotal = state.articles.filter((a) => isArticleStarred(a.id)).length;
+
+        document.getElementById('badge-all').textContent = state.articles.length;
+        document.getElementById('badge-unread').textContent = unreadTotal;
+        document.getElementById('badge-starred').textContent = starredTotal;
+
+        ['all', 'unread', 'starred'].forEach((key) => {
+          const drawerBtn = document.getElementById(`drawer-nav-${key}`);
+          const railBtn = document.getElementById(`rail-filter-${key}`);
+          const mobileBtn = document.getElementById(`mobile-nav-${key}`);
+          const isActive = state.activeStream === key;
+          if (drawerBtn) drawerBtn.classList.toggle('active', isActive);
+          if (railBtn) railBtn.classList.toggle('active', isActive);
+          if (mobileBtn) mobileBtn.classList.toggle('active', isActive);
+        });
+
+        const foldersMap = {};
+        state.feeds.forEach((feed) => {
+          const cat = feed.category || 'Subscriptions';
+          if (!foldersMap[cat]) foldersMap[cat] = [];
+          foldersMap[cat].push(feed);
+        });
+
+        const container = document.getElementById('drawer-folders-container');
+        let html = '';
+        Object.keys(foldersMap).forEach((categoryName) => {
+          const catStreamKey = `cat:${categoryName}`;
+          const catUnread = state.articles.filter((a) => (a.category || 'Subscriptions') === categoryName && !isArticleRead(a.id)).length;
+
+          html += `
+            <div class="drawer-section-label">
+              <span>${escapeHtml(categoryName)}</span>
+              <span>${catUnread > 0 ? catUnread : ''}</span>
+            </div>
+            <button class="nav-pill-item ${state.activeStream === catStreamKey ? 'active' : ''}" data-stream="${escapeHtml(catStreamKey)}">
+              <span class="nav-pill-left">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                <span class="nav-pill-title">All ${escapeHtml(categoryName)}</span>
+              </span>
+              <span class="nav-badge">${catUnread}</span>
+            </button>
+          `;
+
+          foldersMap[categoryName].forEach((feed) => {
+            const feedStreamKey = `feed:${feed.id}`;
+            const feedUnread = state.articles.filter((a) => a.feedId === feed.id && !isArticleRead(a.id)).length;
+            html += `
+              <div class="nav-pill-item ${state.activeStream === feedStreamKey ? 'active' : ''}" data-stream="${escapeHtml(feedStreamKey)}" role="button" tabindex="0">
+                <span class="nav-pill-left">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+                  <span class="nav-pill-title">${escapeHtml(feed.title)}</span>
+                </span>
+                <span style="display:inline-flex; align-items:center; gap:4px;">
+                  <button class="feed-delete-btn" data-delete-feed="${escapeHtml(feed.id)}" title="Unsubscribe" aria-label="Unsubscribe">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </button>
+                  <span class="nav-badge">${feedUnread}</span>
+                </span>
+              </div>
+            `;
+          });
+        });
+        container.innerHTML = html;
+      }
+
+      function renderHeaderAndChips() {
+        let streamTitle = 'All Articles';
+        if (state.activeStream === 'unread') streamTitle = 'Unread Articles';
+        else if (state.activeStream === 'starred') streamTitle = 'Starred Items';
+        else if (state.activeStream.startsWith('cat:')) streamTitle = state.activeStream.slice(4);
+        else if (state.activeStream.startsWith('feed:')) {
+          const f = state.feeds.find((x) => x.id === state.activeStream.slice(5));
+          if (f) streamTitle = f.title;
+        }
+
+        document.getElementById('active-stream-title').textContent = streamTitle;
+        const visible = getFilteredArticles();
+        const unreadInVisible = visible.filter((a) => !isArticleRead(a.id)).length;
+        document.getElementById('active-stream-subtitle').textContent =
+          `${visible.length} items (${unreadInVisible} unread) • j/k navigate • ? shortcuts`;
+
+        ['all', 'unread', 'starred'].forEach((chipKey) => {
+          const chip = document.getElementById(`chip-filter-${chipKey}`);
+          if (chip) chip.classList.toggle('active', state.statusFilter === chipKey);
+        });
+
+        const compactBtn = document.getElementById('view-compact-btn');
+        const cardsBtn = document.getElementById('view-cards-btn');
+        const scrollWrap = document.getElementById('feed-scroll-container');
+        if (compactBtn && cardsBtn && scrollWrap) {
+          compactBtn.classList.toggle('active', state.viewMode === 'compact');
+          cardsBtn.classList.toggle('active', state.viewMode === 'cards');
+          scrollWrap.classList.toggle('view-compact', state.viewMode === 'compact');
+          scrollWrap.classList.toggle('view-cards', state.viewMode === 'cards');
+        }
+      }
+
+      function renderArticlesList() {
+        const listEl = document.getElementById('articles-list');
+        const visible = getFilteredArticles();
+
+        if (visible.length === 0) {
+          listEl.innerHTML = `
+            <li class="empty-state">
+              <div class="empty-icon-circle">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+              <h3 style="font-size:1.1rem; color:var(--md-sys-color-on-surface);">All caught up</h3>
+              <p style="font-size:0.86rem; max-width:300px;">No articles match your current filter. Switch to "All" or press <strong>r</strong> to refresh feeds.</p>
+            </li>
+          `;
+          return;
+        }
+
+        const html = visible
+          .map((article) => {
+            const isRead = isArticleRead(article.id);
+            const isStarred = isArticleStarred(article.id);
+            const isSelected = state.selectedArticleId === article.id;
+            const relTime = formatRelativeTime(article.pubDate);
+
+            if (state.viewMode === 'compact') {
+              return `
+                <li class="article-item compact-row ${isRead ? 'is-read' : ''} ${isSelected ? 'selected' : ''}"
+                    data-article-id="${escapeHtml(article.id)}"
+                    role="option"
+                    aria-selected="${isSelected}">
+                  <button class="unread-dot-btn" data-toggle-read="${escapeHtml(article.id)}" title="${isRead ? 'Mark as unread' : 'Mark as read'}" aria-label="Toggle read">
+                    <span class="unread-dot"></span>
+                  </button>
+                  <button class="star-btn ${isStarred ? 'starred' : ''}" data-toggle-star="${escapeHtml(article.id)}" title="Toggle star" aria-label="Toggle star">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  </button>
+                  <span class="compact-source">${escapeHtml(article.feedTitle)}</span>
+                  <div class="compact-main">
+                    <span class="compact-title">${escapeHtml(article.title)}</span>
+                    <span class="compact-snippet">— ${escapeHtml(article.snippet || '')}</span>
+                  </div>
+                  <time class="compact-time">${escapeHtml(relTime)}</time>
+                </li>
+              `;
+            }
+
+            return `
+              <li class="article-item card-item ${isRead ? 'is-read' : ''} ${isSelected ? 'selected' : ''}"
+                  data-article-id="${escapeHtml(article.id)}"
+                  role="option"
+                  aria-selected="${isSelected}">
+                <div>
+                  <div class="card-top-meta">
+                    <span class="card-feed-pill">${escapeHtml(article.feedTitle)}</span>
+                    <time class="compact-time">${escapeHtml(relTime)}</time>
+                  </div>
+                  <h3 class="card-title" style="margin-top:10px;">${escapeHtml(article.title)}</h3>
+                  <p class="card-excerpt" style="margin-top:8px;">${escapeHtml(article.snippet || '')}</p>
+                </div>
+                <div class="card-footer">
+                  <span>${escapeHtml(article.category || 'Subscriptions')}</span>
+                  <div class="card-actions">
+                    <button class="unread-dot-btn" data-toggle-read="${escapeHtml(article.id)}" title="${isRead ? 'Mark unread' : 'Mark read'}" aria-label="Toggle read">
+                      <span class="unread-dot"></span>
+                    </button>
+                    <button class="star-btn ${isStarred ? 'starred' : ''}" data-toggle-star="${escapeHtml(article.id)}" title="Toggle star" aria-label="Toggle star">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="${isStarred ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    </button>
+                  </div>
+                </div>
+              </li>
+            `;
+          })
+          .join('');
+
+        listEl.innerHTML = html;
+      }
+
+      function renderReadingPane() {
+        const root = document.getElementById('reader-content-root');
+        const article = state.articles.find((a) => a.id === state.selectedArticleId);
+
+        const readLabel = document.getElementById('reader-read-label');
+        const starLabel = document.getElementById('reader-star-label');
+        const starSvg = document.getElementById('reader-star-svg');
+
+        if (!article) {
+          root.innerHTML = `
+            <div class="empty-state" style="min-height: 55vh;">
+              <div class="empty-icon-circle">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+              </div>
+              <h3 style="font-size:1.1rem; color:var(--md-sys-color-on-surface);">Select an article to read</h3>
+              <p style="font-size:0.86rem; max-width:340px;">Use <strong>j</strong> and <strong>k</strong> on your keyboard or select any headline to open the distraction-free reader.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const isRead = isArticleRead(article.id);
+        const isStarred = isArticleStarred(article.id);
+
+        if (readLabel) readLabel.textContent = isRead ? 'Read' : 'Unread';
+        if (starLabel) starLabel.textContent = isStarred ? 'Starred' : 'Star';
+        if (starSvg) starSvg.setAttribute('fill', isStarred ? 'currentColor' : 'none');
+
+        const formattedDate = new Date(article.pubDate).toLocaleString(undefined, {
+          weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        root.innerHTML = `
+          <div class="reader-article-container">
+            <div class="reader-meta-header">
+              <span class="reader-feed-tag">${escapeHtml(article.feedTitle)}</span>
+              <span class="reader-timestamp">${escapeHtml(formattedDate)}</span>
+            </div>
+            <h1 class="reader-headline">${escapeHtml(article.title)}</h1>
+            <div class="reader-byline">
+              <span>By <strong>${escapeHtml(article.author || article.feedTitle)}</strong> • ${escapeHtml(article.category || 'Subscriptions')}</span>
+              <a href="${escapeHtml(article.link)}" target="_blank" rel="noopener noreferrer" style="color:var(--md-sys-color-primary); font-weight:600; text-decoration:none;">
+                View Original ↗
+              </a>
+            </div>
+            <div class="reader-body">
+              ${article.content}
+            </div>
+            <div class="reader-cta-box">
+              <div>
+                <div style="font-weight:600; font-size:0.92rem;">Continue reading at ${escapeHtml(article.feedTitle)}</div>
+                <div style="font-size:0.8rem; color:var(--md-sys-color-outline);">Press <kbd class="kbd-badge">v</kbd> to open original web page in a new tab</div>
+              </div>
+              <a href="${escapeHtml(article.link)}" target="_blank" rel="noopener noreferrer" class="m3-btn-filled">
+                <span>Open Original</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderAll() {
+        renderDrawerAndBadges();
+        renderHeaderAndChips();
+        renderArticlesList();
+        renderReadingPane();
+      }
+
+      function selectArticle(articleId, markReadAutomatically = true, openMobileSheet = true) {
+        if (!articleId) return;
+        state.selectedArticleId = articleId;
+        if (markReadAutomatically && !isArticleRead(articleId)) {
+          state.readIds.add(articleId);
+          persistReadIds();
+        }
+        renderAll();
+
+        const rowEl = document.querySelector(`[data-article-id="${CSS.escape(articleId)}"]`);
+        if (rowEl) rowEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+
+        const readerScroll = document.getElementById('reader-scroll');
+        if (readerScroll) readerScroll.scrollTop = 0;
+
+        if (openMobileSheet && window.innerWidth <= 1024) {
+          document.getElementById('reader-pane').classList.add('mobile-open');
+        }
+      }
+
+      function navigateRelativeArticle(delta) {
+        const visible = getFilteredArticles();
+        if (visible.length === 0) return;
+        const currentIndex = visible.findIndex((a) => a.id === state.selectedArticleId);
+        let nextIndex = 0;
+        if (currentIndex === -1) {
+          nextIndex = delta > 0 ? 0 : visible.length - 1;
+        } else {
+          nextIndex = Math.min(visible.length - 1, Math.max(0, currentIndex + delta));
+        }
+        selectArticle(visible[nextIndex].id, true, false);
+      }
+
+      function openSelectedOriginalInNewTab() {
+        const article = state.articles.find((a) => a.id === state.selectedArticleId);
+        if (article && article.link) {
+          window.open(article.link, '_blank', 'noopener,noreferrer');
+        } else {
+          showSnackbar('Select an article first to open its original source');
+        }
+      }
+
+      function generateOpmlXml() {
+        const dateStr = new Date().toUTCString();
+        const folders = {};
+        state.feeds.forEach((f) => {
+          const cat = f.category || 'Subscriptions';
+          if (!folders[cat]) folders[cat] = [];
+          folders[cat].push(f);
+        });
+
+        let outlinesXml = '';
+        Object.keys(folders).forEach((cat) => {
+          outlinesXml += `    <outline text="${escapeHtml(cat)}" title="${escapeHtml(cat)}">\n`;
+          folders[cat].forEach((f) => {
+            outlinesXml += `      <outline type="rss" text="${escapeHtml(f.title)}" title="${escapeHtml(f.title)}" xmlUrl="${escapeHtml(f.url)}" htmlUrl="${escapeHtml(f.siteUrl || f.url)}" />\n`;
+          });
+          outlinesXml += `    </outline>\n`;
+        });
+
+        return `<?xml version="1.0" encoding="UTF-8"?>\n<opml version="2.0">\n  <head>\n    <title>Rustic Reader Subscriptions</title>\n    <dateCreated>${dateStr}</dateCreated>\n  </head>\n  <body>\n${outlinesXml}  </body>\n</opml>`;
+      }
+
+      function importOpmlXml(xmlText) {
+        if (!xmlText || !xmlText.trim()) {
+          showSnackbar('Please provide valid OPML XML');
+          return;
+        }
+        const doc = new DOMParser().parseFromString(xmlText, 'text/xml');
+        if (doc.querySelector('parsererror')) {
+          showSnackbar('Invalid OPML XML format');
+          return;
+        }
+        const outlines = Array.from(doc.querySelectorAll('outline[xmlUrl]'));
+        if (outlines.length === 0) {
+          showSnackbar('No RSS feeds found in OPML');
+          return;
+        }
+
+        let addedCount = 0;
+        outlines.forEach((node) => {
+          const xmlUrl = node.getAttribute('xmlUrl');
+          if (!xmlUrl) return;
+          const title = node.getAttribute('title') || node.getAttribute('text') || xmlUrl;
+          const parent = node.parentElement;
+          const category = parent && parent.tagName.toLowerCase() === 'outline'
+            ? parent.getAttribute('title') || parent.getAttribute('text') || 'Imported'
+            : 'Imported';
+
+          if (!state.feeds.some((f) => f.url === xmlUrl)) {
+            state.feeds.push({
+              id: 'feed-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+              title,
+              url: xmlUrl,
+              siteUrl: node.getAttribute('htmlUrl') || xmlUrl,
+              category
+            });
+            addedCount += 1;
+          }
+        });
+
+        safeSetStorage(STORAGE_KEYS.FEEDS, state.feeds);
+        closeAllModals();
+        showSnackbar(`Imported ${addedCount} feed(s) from OPML`);
+        refreshAllFeeds(false);
+      }
+
+      function showSnackbar(message, actionText, actionCallback) {
+        const container = document.getElementById('snackbar-container');
+        if (!container) return;
+        container.innerHTML = '';
+        const el = document.createElement('div');
+        el.className = 'm3-snackbar';
+        el.innerHTML = `<span>${escapeHtml(message)}</span>`;
+        if (actionText && typeof actionCallback === 'function') {
+          const btn = document.createElement('button');
+          btn.className = 'snackbar-action';
+          btn.textContent = actionText;
+          btn.addEventListener('click', () => {
+            actionCallback();
+            el.remove();
+          });
+          el.appendChild(btn);
+        }
+        container.appendChild(el);
+        setTimeout(() => { if (el.parentNode) el.remove(); }, 4200);
+      }
+
+      function openDrawer() {
+        document.getElementById('nav-drawer').classList.add('open');
+        document.getElementById('drawer-scrim').classList.add('visible');
+      }
+
+      function closeDrawer() {
+        document.getElementById('nav-drawer').classList.remove('open');
+        document.getElementById('drawer-scrim').classList.remove('visible');
+      }
+
+      function closeAllModals() {
+        document.querySelectorAll('.modal-backdrop').forEach((m) => m.classList.remove('open'));
+      }
+
+      function bindEvents() {
+        document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+        if (window.matchMedia) {
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if (!state.theme) applyTheme();
+          });
+        }
+
+        document.getElementById('view-compact-btn').addEventListener('click', () => {
+          state.viewMode = 'compact';
+          safeSetStorage(STORAGE_KEYS.VIEW_MODE, 'compact');
+          renderAll();
+        });
+        document.getElementById('view-cards-btn').addEventListener('click', () => {
+          state.viewMode = 'cards';
+          safeSetStorage(STORAGE_KEYS.VIEW_MODE, 'cards');
+          renderAll();
+        });
+
+        document.getElementById('refresh-feeds-btn').addEventListener('click', () => refreshAllFeeds(true));
+        document.getElementById('mark-all-read-btn').addEventListener('click', markAllVisibleAsRead);
+
+        const searchInput = document.getElementById('search-input');
+        const searchClear = document.getElementById('search-clear-btn');
+        searchInput.addEventListener('input', (e) => {
+          state.searchQuery = e.target.value;
+          searchClear.classList.toggle('visible', state.searchQuery.length > 0);
+          renderAll();
+        });
+        searchClear.addEventListener('click', () => {
+          state.searchQuery = '';
+          searchInput.value = '';
+          searchClear.classList.remove('visible');
+          renderAll();
+        });
+
+        document.getElementById('open-drawer-btn').addEventListener('click', openDrawer);
+        document.getElementById('close-drawer-btn').addEventListener('click', closeDrawer);
+        document.getElementById('drawer-scrim').addEventListener('click', closeDrawer);
+        document.getElementById('rail-open-drawer-btn').addEventListener('click', openDrawer);
+        document.getElementById('mobile-nav-feeds').addEventListener('click', openDrawer);
+
+        ['all', 'unread', 'starred'].forEach((streamKey) => {
+          document.getElementById(`drawer-nav-${streamKey}`).addEventListener('click', () => {
+            state.activeStream = streamKey;
+            state.statusFilter = streamKey;
+            closeDrawer();
+            renderAll();
+          });
+          document.getElementById(`rail-filter-${streamKey}`).addEventListener('click', () => {
+            state.activeStream = streamKey;
+            state.statusFilter = streamKey;
+            renderAll();
+          });
+          document.getElementById(`mobile-nav-${streamKey}`).addEventListener('click', () => {
+            state.activeStream = streamKey;
+            state.statusFilter = streamKey;
+            document.getElementById('reader-pane').classList.remove('mobile-open');
+            renderAll();
+          });
+          document.getElementById(`chip-filter-${streamKey}`).addEventListener('click', () => {
+            state.statusFilter = streamKey;
+            renderAll();
+          });
+        });
+
+        document.getElementById('drawer-folders-container').addEventListener('click', (e) => {
+          const deleteBtn = e.target.closest('[data-delete-feed]');
+          if (deleteBtn) {
+            e.stopPropagation();
+            const feedId = deleteBtn.getAttribute('data-delete-feed');
+            const targetFeed = state.feeds.find((f) => f.id === feedId);
+            state.feeds = state.feeds.filter((f) => f.id !== feedId);
+            state.articles = state.articles.filter((a) => a.feedId !== feedId);
+            if (state.activeStream === `feed:${feedId}`) state.activeStream = 'all';
+            safeSetStorage(STORAGE_KEYS.FEEDS, state.feeds);
+            renderAll();
+            showSnackbar(`Unsubscribed from ${targetFeed ? targetFeed.title : 'feed'}`);
+            return;
+          }
+
+          const streamItem = e.target.closest('[data-stream]');
+          if (streamItem) {
+            state.activeStream = streamItem.getAttribute('data-stream');
+            closeDrawer();
+            renderAll();
+          }
+        });
+
+        document.getElementById('articles-list').addEventListener('click', (e) => {
+          const readBtn = e.target.closest('[data-toggle-read]');
+          if (readBtn) {
+            e.stopPropagation();
+            toggleArticleRead(readBtn.getAttribute('data-toggle-read'));
+            return;
+          }
+          const starBtn = e.target.closest('[data-toggle-star]');
+          if (starBtn) {
+            e.stopPropagation();
+            toggleArticleStar(starBtn.getAttribute('data-toggle-star'));
+            return;
+          }
+          const itemEl = e.target.closest('[data-article-id]');
+          if (itemEl) selectArticle(itemEl.getAttribute('data-article-id'), true, true);
+        });
+
+        document.getElementById('reader-back-btn').addEventListener('click', () => {
+          document.getElementById('reader-pane').classList.remove('mobile-open');
+        });
+        document.getElementById('reader-prev-btn').addEventListener('click', () => navigateRelativeArticle(-1));
+        document.getElementById('reader-next-btn').addEventListener('click', () => navigateRelativeArticle(1));
+        document.getElementById('reader-toggle-read-btn').addEventListener('click', () => {
+          if (state.selectedArticleId) toggleArticleRead(state.selectedArticleId);
+        });
+        document.getElementById('reader-toggle-star-btn').addEventListener('click', () => {
+          if (state.selectedArticleId) toggleArticleStar(state.selectedArticleId);
+        });
+        document.getElementById('reader-font-toggle-btn').addEventListener('click', () => {
+          state.fontStyle = state.fontStyle === 'serif' ? 'sans' : 'serif';
+          safeSetStorage(STORAGE_KEYS.FONT_STYLE, state.fontStyle);
+          applyReaderTypography();
+          showSnackbar(`Reader font set to ${state.fontStyle === 'serif' ? 'Serif' : 'Sans'}`);
+        });
+        document.getElementById('reader-open-original-btn').addEventListener('click', openSelectedOriginalInNewTab);
+
+        const openAddFeedModal = () => {
+          closeDrawer();
+          document.getElementById('add-feed-modal').classList.add('open');
+          document.getElementById('feed-url-input').focus();
+        };
+        document.getElementById('drawer-add-feed-btn').addEventListener('click', openAddFeedModal);
+        document.getElementById('rail-add-feed-btn').addEventListener('click', openAddFeedModal);
+        document.getElementById('mobile-nav-add').addEventListener('click', openAddFeedModal);
+        document.getElementById('close-add-feed-modal').addEventListener('click', closeAllModals);
+        document.getElementById('cancel-add-feed-btn').addEventListener('click', closeAllModals);
+
+        document.querySelectorAll('.preset-feed-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            document.getElementById('feed-url-input').value = btn.getAttribute('data-url');
+            document.getElementById('feed-title-input').value = btn.getAttribute('data-title');
+            document.getElementById('feed-category-input').value = btn.getAttribute('data-cat');
+          });
+        });
+
+        document.getElementById('add-feed-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const url = document.getElementById('feed-url-input').value.trim();
+          const title = document.getElementById('feed-title-input').value.trim() || new URL(url).hostname.replace('www.', '');
+          const category = document.getElementById('feed-category-input').value.trim() || 'Subscriptions';
+          if (!url) return;
+
+          const newFeed = { id: 'feed-' + Date.now(), title, url, siteUrl: url, category };
+          state.feeds.push(newFeed);
+          safeSetStorage(STORAGE_KEYS.FEEDS, state.feeds);
+          document.getElementById('add-feed-form').reset();
+          closeAllModals();
+          showSnackbar(`Added "${title}"`);
+          await refreshAllFeeds(false);
+          state.activeStream = `feed:${newFeed.id}`;
+          renderAll();
+        });
+
+        document.getElementById('open-opml-modal-btn').addEventListener('click', () => {
+          closeDrawer();
+          document.getElementById('opml-textarea').value = generateOpmlXml();
+          document.getElementById('opml-modal').classList.add('open');
+        });
+        document.getElementById('close-opml-modal').addEventListener('click', closeAllModals);
+
+        document.getElementById('opml-file-input').addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => { document.getElementById('opml-textarea').value = String(reader.result || ''); };
+          reader.readAsText(file);
+        });
+
+        document.getElementById('import-opml-btn').addEventListener('click', () => {
+          importOpmlXml(document.getElementById('opml-textarea').value);
+        });
+
+        document.getElementById('export-opml-download-btn').addEventListener('click', () => {
+          const xml = generateOpmlXml();
+          const blob = new Blob([xml], { type: 'text/x-opml+xml;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'rustic-reader-subscriptions.opml';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+          showSnackbar('Exported subscriptions to OPML');
+        });
+
+        document.getElementById('copy-opml-btn').addEventListener('click', () => {
+          const textarea = document.getElementById('opml-textarea');
+          textarea.value = generateOpmlXml();
+          textarea.select();
+          try {
+            navigator.clipboard.writeText(textarea.value);
+            showSnackbar('Copied OPML XML to clipboard');
+          } catch (err) {
+            document.execCommand('copy');
+            showSnackbar('Copied OPML XML');
+          }
+        });
+
+        const openShortcutsModal = () => {
+          closeDrawer();
+          document.getElementById('shortcuts-modal').classList.add('open');
+        };
+        document.getElementById('open-shortcuts-modal-btn').addEventListener('click', openShortcutsModal);
+        document.getElementById('rail-shortcuts-btn').addEventListener('click', openShortcutsModal);
+        document.getElementById('close-shortcuts-modal').addEventListener('click', closeAllModals);
+        document.getElementById('done-shortcuts-btn').addEventListener('click', closeAllModals);
+
+        document.querySelectorAll('.modal-backdrop').forEach((backdrop) => {
+          backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) closeAllModals();
+          });
+        });
+
+        window.addEventListener('keydown', (e) => {
+          const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+          const isTyping = tag === 'input' || tag === 'textarea' || tag === 'select' || (e.target && e.target.isContentEditable);
+
+          if (e.key === 'Escape') {
+            closeAllModals();
+            closeDrawer();
+            document.getElementById('reader-pane').classList.remove('mobile-open');
+            if (isTyping && e.target.blur) e.target.blur();
+            return;
+          }
+
+          if (isTyping) return;
+
+          if (e.key === 'A' && e.shiftKey) {
+            e.preventDefault();
+            markAllVisibleAsRead();
+            return;
+          }
+
+          if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
+            e.preventDefault();
+            document.getElementById('shortcuts-modal').classList.toggle('open');
+            return;
+          }
+
+          if (e.key === '/' && !e.shiftKey) {
+            e.preventDefault();
+            document.getElementById('search-input').focus();
+            return;
+          }
+
+          if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+          switch (e.key) {
+            case 'j':
+              e.preventDefault();
+              navigateRelativeArticle(1);
+              break;
+            case 'k':
+              e.preventDefault();
+              navigateRelativeArticle(-1);
+              break;
+            case 's':
+              e.preventDefault();
+              if (state.selectedArticleId) toggleArticleStar(state.selectedArticleId);
+              break;
+            case 'm':
+              e.preventDefault();
+              if (state.selectedArticleId) toggleArticleRead(state.selectedArticleId);
+              break;
+            case 'v':
+              e.preventDefault();
+              openSelectedOriginalInNewTab();
+              break;
+            case 'r':
+              e.preventDefault();
+              refreshAllFeeds(true);
+              break;
+            case '1':
+              e.preventDefault();
+              state.viewMode = 'compact';
+              safeSetStorage(STORAGE_KEYS.VIEW_MODE, 'compact');
+              renderAll();
+              break;
+            case '2':
+              e.preventDefault();
+              state.viewMode = 'cards';
+              safeSetStorage(STORAGE_KEYS.VIEW_MODE, 'cards');
+              renderAll();
+              break;
+            default:
+              break;
+          }
+        });
+
+        let deferredPrompt = null;
+        const installBtn = document.getElementById('install-pwa-btn');
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          if (installBtn) installBtn.style.display = 'inline-flex';
+        });
+
+        if (installBtn) {
+          installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+              deferredPrompt.prompt();
+              await deferredPrompt.userChoice;
+              deferredPrompt = null;
+              installBtn.style.display = 'none';
+            }
+          });
+        }
+      }
+
+      function initApp() {
+        applyTheme();
+        applyReaderTypography();
+        bindEvents();
+        refreshAllFeeds(false);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
+      }
+    })();
+  </script>
+</body>
+</html>
